@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Component</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #userList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .userCard {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const apiUrl = "https://jsonplaceholder.typicode.com/users";
+        const appElement = document.getElementById("app");
+
+        async function fetchData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                displayData(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                displayError();
+            }
+        }
+
+        function displayData(users) {
+            const userListElement = document.createElement("ul");
+            userListElement.id = "userList";
+
+            users.forEach(user => {
+                const userCard = document.createElement("li");
+                userCard.className = "userCard";
+                userCard.innerHTML = `
+                    <strong>${user.name}</strong><br>
+                    Email: ${user.email}<br>
+                    Phone: ${user.phone}
+                `;
+                userListElement.appendChild(userCard);
+            });
+
+            appElement.appendChild(userListElement);
+        }
+
+        function displayError() {
+            appElement.innerHTML = "<p>Error fetching data. Please try again later.</p>";
+        }
+
+        fetchData();
+    });
+</script>
+
+</body>
+</html>
